@@ -16,8 +16,14 @@ public class StartGame {
         int width = Toolkit.getDefaultToolkit().getScreenSize().width;
         int height = Toolkit.getDefaultToolkit().getScreenSize().height;
         MenuPanel menuPanel = new MenuPanel();
+        GamePanel gamePanel = null;
+        try {
+            gamePanel = new GamePanel();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "程序根目录下找不到文件 scores.txt", "错误", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        GamePanel gamePanel = new GamePanel();
 
         jFrame.add(container);
         //container.add(menuPanel, "menu");
