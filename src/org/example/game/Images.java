@@ -2,7 +2,6 @@ package org.example.game;
 
 import javax.swing.*;
 import java.io.File;
-import java.net.URL;
 
 public class Images {
     public static ImageIcon bodyImg;

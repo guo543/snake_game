@@ -185,7 +185,7 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        this.setBackground(new Color(232, 255, 233));
+        this.setBackground(new Color(191, 0, 47));
 
         g.setColor(new Color(255, 255, 255));
         g.fillRect(25, 50, 725, 675);
@@ -202,10 +202,10 @@ public class GamePanel extends JPanel {
             g.setColor(new Color(27, 31, 255));
             g.setFont(new Font("微软雅黑", Font.BOLD, 40));
             g.drawString("按空格键 开始游戏", 250, 330);
-            this.setBackground(new Color(188, 211, 189));
+            this.setBackground(new Color(133, 0, 20));
         }
 
-        g.setColor(new Color(24, 25, 139));
+        g.setColor(new Color(255, 255, 255));
         g.setFont(new Font("微软雅黑", Font.BOLD, 20));
         g.drawString("最高纪录：" + Math.max(max, score) + "     得分： " + score, 450, 40);
 
