@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 public class GamePanel extends JPanel {
@@ -11,6 +13,8 @@ public class GamePanel extends JPanel {
     private int[] snakeX = new int[200];
     private int[] snakeY = new int[200];
     private int length = 3;
+
+    private LinkedList<String> steps;
 
     private HighScores highScores;
     private int max;
@@ -25,11 +29,17 @@ public class GamePanel extends JPanel {
 
     boolean started;
 
+    boolean beginning;
+
     boolean scored;
 
     boolean dead;
 
+    boolean pathFindingEnabled;
+
     public void init() {
+        beginning = true;
+
         started = false;
         scored = false;
         dead = false;
@@ -50,7 +60,12 @@ public class GamePanel extends JPanel {
         foodX = 300;
         foodY = 200;
 
+        steps = new LinkedList<>();
+
         score = 0;
+
+        pathFindingEnabled = false;
+        PathFinder.findPath(snakeX, snakeY, foodX, foodY, steps, length);
     }
 
     public GamePanel() throws IOException {
@@ -76,42 +91,61 @@ public class GamePanel extends JPanel {
                 if (keyCode == KeyEvent.VK_SPACE) {
                     if (dead) {
                         init();
-                        started = true;
+                        started = false;
+                        beginning = true;
                     } else {
                         started = !started;
-
+                        if (beginning) {
+                            beginning = false;
+                        }
                     }
 
                     repaint();
                 }
 
-                if (keyCode == KeyEvent.VK_UP) {
-                    if (!"U".equals(direction)) {
-                        direction = "U";
+                if (keyCode == KeyEvent.VK_A) {
+                    if (beginning) {
+                        pathFindingEnabled = true;
+                        started = true;
+                        timer.setDelay(10);
+
+                    }
+                    if (!beginning && !started) {
+                        pathFindingEnabled = false;
+                        started = true;
+                        timer.setDelay(110);
                     }
                 }
 
-                if (keyCode == KeyEvent.VK_DOWN) {
-                    if (!"D".equals(direction)) {
-                        direction = "D";
+                if (!pathFindingEnabled) {
+                    if (keyCode == KeyEvent.VK_UP) {
+                        if (!"U".equals(direction)) {
+                            direction = "U";
+                        }
                     }
-                }
 
-                if (keyCode == KeyEvent.VK_LEFT) {
-                    if (!"L".equals(direction)) {
-                        direction = "L";
+                    if (keyCode == KeyEvent.VK_DOWN) {
+                        if (!"D".equals(direction)) {
+                            direction = "D";
+                        }
                     }
-                }
 
-                if (keyCode == KeyEvent.VK_RIGHT) {
-                    if (!"R".equals(direction)) {
-                        direction = "R";
+                    if (keyCode == KeyEvent.VK_LEFT) {
+                        if (!"L".equals(direction)) {
+                            direction = "L";
+                        }
+                    }
+
+                    if (keyCode == KeyEvent.VK_RIGHT) {
+                        if (!"R".equals(direction)) {
+                            direction = "R";
+                        }
                     }
                 }
             }
         });
 
-        timer = new Timer(100, new ActionListener() {
+        timer = new Timer(110, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (started && !dead) {
@@ -124,6 +158,17 @@ public class GamePanel extends JPanel {
                         snakeX[i] = snakeX[i - 1];
                         snakeY[i] = snakeY[i - 1];
                     }
+
+                    if (pathFindingEnabled) {
+                        try {
+                            direction = steps.pop();
+                        } catch (NoSuchElementException noSuchElementException) {
+                            dead = true;
+                            timer.setDelay(110);
+                        }
+
+                    }
+
                     if ("U".equals(direction)) {
                         snakeY[0] -= 25;
                     } else if ("D".equals(direction)) {
@@ -171,8 +216,11 @@ public class GamePanel extends JPanel {
                             }
                         } while (overlap);
 
-
                         score += (10 + score * 0.05);
+
+                        if (pathFindingEnabled) {
+                            PathFinder.findPath(snakeX, snakeY, foodX, foodY, steps, length);
+                        }
                     }
                     repaint();
                 }
@@ -184,7 +232,6 @@ public class GamePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         this.setBackground(new Color(191, 0, 47));
 
         g.setColor(new Color(255, 255, 255));
@@ -201,7 +248,17 @@ public class GamePanel extends JPanel {
         if (!started) {
             g.setColor(new Color(27, 31, 255));
             g.setFont(new Font("微软雅黑", Font.BOLD, 40));
-            g.drawString("按空格键 开始游戏", 250, 330);
+            if (beginning) {
+                g.drawString("按空格键 开始游戏", 250, 330);
+                g.drawString("按A以自动模式开始 (beta)", 230, 380);
+
+            } else {
+                g.drawString("按空格键 继续游戏", 250, 330);
+                if (pathFindingEnabled) {
+                    g.drawString("按A关闭自动模式", 250, 380);
+                }
+
+            }
             this.setBackground(new Color(133, 0, 20));
         }
 
@@ -232,8 +289,6 @@ public class GamePanel extends JPanel {
                 g.drawString(rank + ". " + highScores.getScores().get(i), 450, 200 + rank * 30);
                 rank++;
             }
-
-
         }
     }
 }
