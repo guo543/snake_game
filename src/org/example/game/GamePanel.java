@@ -107,7 +107,7 @@ public class GamePanel extends JPanel {
                     if (beginning) {
                         pathFindingEnabled = true;
                         started = true;
-                        timer.setDelay(10);
+                        timer.setDelay(20);
 
                     }
                     if (!beginning && !started) {
