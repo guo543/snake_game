@@ -107,7 +107,7 @@ public class GamePanel extends JPanel {
                     if (beginning) {
                         pathFindingEnabled = true;
                         started = true;
-                        timer.setDelay(20);
+                        timer.setDelay(30);
 
                     }
                     if (!beginning && !started) {
@@ -151,6 +151,7 @@ public class GamePanel extends JPanel {
                 if (started && !dead) {
                     if (scored) {
                         length++;
+                        System.out.println(length);
                         scored = false;
                     }
 
@@ -216,7 +217,7 @@ public class GamePanel extends JPanel {
                             }
                         } while (overlap);
 
-                        score += (10 + score * 0.05);
+                        score += 1;
 
                         if (pathFindingEnabled) {
                             PathFinder.findPath(snakeX, snakeY, foodX, foodY, steps, length);
