@@ -11,7 +11,7 @@ public class StartGame {
         CardLayout cards = new CardLayout();
         JPanel container = new JPanel(cards);
 
-        jFrame.setTitle("贪吃蛇");
+        jFrame.setTitle("Snake");
 
         int width = Toolkit.getDefaultToolkit().getScreenSize().width;
         int height = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -20,7 +20,8 @@ public class StartGame {
         try {
             gamePanel = new GamePanel();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "程序根目录下找不到文件 scores.txt", "错误", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Cannot find file 'scores.txt' in root directory",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 

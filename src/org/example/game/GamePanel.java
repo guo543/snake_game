@@ -233,7 +233,7 @@ public class GamePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        this.setBackground(new Color(191, 0, 47));
+        this.setBackground(new Color(0, 10, 151));
 
         g.setColor(new Color(255, 255, 255));
         g.fillRect(25, 50, 725, 675);
@@ -248,30 +248,34 @@ public class GamePanel extends JPanel {
 
         if (!started) {
             g.setColor(new Color(27, 31, 255));
-            g.setFont(new Font("微软雅黑", Font.BOLD, 40));
+            g.setFont(new Font("TimesNewRoman", Font.BOLD, 30));
+            g.setColor(new Color(255, 255, 255));
+            g.fillRect(100, 280, 520, 190);
+            g.setColor(new Color(27, 31, 255));
+            g.drawRect(100, 280, 520, 190);
             if (beginning) {
-                g.drawString("按空格键 开始游戏", 250, 330);
-                g.drawString("按A以自动模式开始 (beta)", 230, 380);
-
+                g.drawString("Press Space to Start", 130, 330);
+                g.drawString("Press A to enable path-finding", 130, 380);
+                g.drawString("(beta)", 130, 430);
             } else {
-                g.drawString("按空格键 继续游戏", 250, 330);
+                g.drawString("Press Space to Continue", 130, 330);
                 if (pathFindingEnabled) {
-                    g.drawString("按A关闭自动模式", 250, 380);
+                    g.drawString("Press A to disable path-finding", 130, 380);
                 }
 
             }
-            this.setBackground(new Color(133, 0, 20));
+            this.setBackground(new Color(0, 10, 99));
         }
 
         g.setColor(new Color(255, 255, 255));
-        g.setFont(new Font("微软雅黑", Font.BOLD, 20));
-        g.drawString("最高纪录：" + Math.max(max, score) + "     得分： " + score, 450, 40);
+        g.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
+        g.drawString("High Score：" + Math.max(max, score) + "     Score： " + score, 450, 40);
 
         if (dead) {
             g.setColor(new Color(139, 83, 46));
-            g.setFont(new Font("微软雅黑", Font.BOLD, 20));
-            g.drawString("游戏结束，按空格重新开始", 200, 100);
-            g.drawString("本次得分：" + score, 450, 100);
+            g.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
+            g.drawString("Press Space to restart", 200, 100);
+            g.drawString("Score：" + score, 450, 100);
             try {
                 highScores.add(score);
             } catch (IOException e) {
@@ -285,7 +289,7 @@ public class GamePanel extends JPanel {
             }
 
             int rank = 1;
-            g.drawString("高分榜", 450, 200);
+            g.drawString("High Scores", 450, 200);
             for (int i = highScores.getScores().size() - 1; i >= 0; i--) {
                 g.drawString(rank + ". " + highScores.getScores().get(i), 450, 200 + rank * 30);
                 rank++;
